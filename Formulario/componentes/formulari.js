@@ -3,55 +3,78 @@ Vue.component('formulari', {
         `
 <div>
 <div class="row">
+<div class="container">
     <div class="col-8">
-        <form class="mt-3" id="myform" @submit.prevent="">
-            <div class="form-group">
-                    <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" id="nombre"  v-model="nominsert"  placeholder="Ingresa el nombre">   
-            </div>
-            <span class="text-danger">{{erroresrecibidos.nom1}}</span>
-            <span class="text-danger">{{erroresrecibidos.nom2}}</span>
-            <div class="form-group">
-                <label for="mobil">Movil</label>
-                <input type="number" class="form-control" id="mobil"  
-                v-model="mobilinsert"  placeholder="Ingresa el movil">   
-            </div>
-            <span class="text-danger">{{erroresrecibidos.mobil}}</span>
-            <div class="form-group">
-                <label for="codipostal">Codigo Postal</label>
-                <input type="number" class="form-control" id="codipostal"   v-model="codipostalinsert"  placeholder="Ingresa el codigo postal">   
-            </div>
-            <span class="text-danger">{{erroresrecibidos.codipostal}}</span>
-
-             <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" class="form-control" id="email"  v-model="emailinsert"  placeholder="Ingresa el nombre">   
-                </div>
-                <span class="text-danger">{{erroresrecibidos.email1}}</span>
-                <span class="text-danger">{{erroresrecibidos.email2}}</span>
-            <div class="form-group">
-                <label for="psw">Password</label>
-                <input type="text" class="form-control" id="psw"  v-model="pswinsert"  placeholder="Ingresa el password">   
-            </div>
-            <span class="text-danger">{{erroresrecibidos.psw1}}</span>
-            <span class="text-danger">{{erroresrecibidos.psw2}}</span>
-            <div class="form-group">
-                <label for="psw2">Confirmar password</label>
-                <input type="text" class="form-control" id="psw2"  v-model="pswinsert2"  placeholder="Repita el psasword">   
-            </div>
-             <span class="text-danger">{{erroresrecibidos.psw3}}</span>
-              <br>
-               <hijo :nomrecibido="nominsert" :mobilrecibido="mobilinsert" :codipostalrecibido= "codipostalinsert" :emailrecibido="emailinsert" :pswrecibido="pswinsert" :pswrecibido2="pswinsert2" @escucharhijo="erroreshijo"></hijo>
-             
-
-
-              
-
-             </form>
-        </div>
+        
+    <form class="mt-3" id="myform" @submit.prevent="">
+    <div>
+    <custominput @escucharhijo="comprobar"
+            v-bind:value="nom"
+            v-on:input="nom = $event"
+            tipo="nom"
             
+    ></custominput>
+        </div>
+        <span class="text-danger">{{erroresrecibidos.nom1}}</span>
+        <span class="text-danger">{{erroresrecibidos.nom2}}</span>
+        <div>
+    <custominput @escucharhijo="comprobar"
+            v-bind:value="mobil"
+            v-on:input="mobil = $event"
+            tipo="mobil"
+    ></custominput>
+    </div>
+    <span class="text-danger">{{erroresrecibidos.mobil}}</span>
+
+    <div>
+    <custominput @escucharhijo="comprobar"
+            v-bind:value="email"
+            v-on:input="email = $event"
+            tipo="email"
+    ></custominput>
+    </div>
+    <span class="text-danger">{{erroresrecibidos.email1}}</span>
+<span class="text-danger">{{erroresrecibidos.email2}}</span>
+
+    <div>
+    <custominput @escucharhijo="comprobar" 
+            v-bind:value="codipostal"
+            v-on:input="codipostal = $event"
+            tipo="codipostal"
+    ></custominput>
+    </div>
+    <span class="text-danger">{{erroresrecibidos.codipostal}}</span>
+    <div>
+    <custominput @escucharhijo="comprobar"
+            v-bind:value="pass1"
+            v-on:input="pass1 = $event"
+            tipo="pass1"
+    ></custominput>
+    </div>
+    <span class="text-danger">{{erroresrecibidos.psw1}}</span>
+            <span class="text-danger">{{erroresrecibidos.psw2}}</span>
+    <div>
+    <custominput @escucharhijo="comprobar" @escucharhijo2="comprobar2"
+            v-bind:value="pass2"
+            v-on:input="pass2 = $event"
+            tipo="pass2"
+    ></custominput>  
+    </div>
+    <span class="text-danger">{{erroresrecibidos.psw3}}</span>
+
+    </form>
+     
+    
+   
+        </div>  
+  
+        <button type="submit" class="btn btn-primary" @click="validar">Enviar</button>
+ 
+        
+    </div>
+
  </div>
-      
+
 </div>
     
        
@@ -59,11 +82,13 @@ Vue.component('formulari', {
     data() {
         return {
 
-            nominsert: '',
-            mobilinsert: '',
-            codipostalinsert: '',
-            emailinsert: '',
-            pswinsert: '',
+            nom: '',
+            mobil: '',
+            codipostal: '',
+            email: '',
+            pass1: '',
+            pass2: '',
+            confirmacion: '',
             erroresrecibidos: [
                 nom1 = '',
                 nom2 = '',
@@ -74,22 +99,40 @@ Vue.component('formulari', {
                 psw1 = '',
                 psw2 = '',
                 psw3 = '',
-
+            
             ],
-
-
         }
 
     },
-    methods:
-    {
-        erroreshijo(value) {
-            this.erroresrecibidos = value;
-            console.log(this.erroresrecibidos)
+    methods:{
+                
+                comprobar(value) {
+                        this.erroresrecibidos = value;
+                },
+                comprobar2(value) {
+                        this.confirmacion = value;
+                        console.log(this.confirmacion)
+                },
+                validar(){
+                        if(this.confirmacion == 0){
+                                alert('Debes completar los campos')
+                        }
+                        else if(this.erroresrecibidos.length > 0 ){
+                                alert('ta todo way')
+                        } else alert('ta todo mal');
+                        
+                                
+                }
 
-        }
 
-    }
+
+}
+
 
 
 })
+
+    
+
+
+
